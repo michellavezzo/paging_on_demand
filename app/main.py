@@ -29,6 +29,7 @@ def read_number_pairs(filename):
 
 def average(array):
     #limit to 1 decimal place
+    # return sum(array)/len(array)
     return round(sum(array)/len(array), 1)
 
 def fcfs(pairs):
@@ -118,7 +119,7 @@ def sjf(pairs):
 
         # If queue is empty but there are still processes left
         if not queue and processes:
-            print('notQueue')
+            # print('notQueue')
             queue.append(processes[0])
             current_time = processes[0][1][0]  # Jump forward in time
             del processes[0]
@@ -128,8 +129,9 @@ def sjf(pairs):
 def RR(pairs, quantum):
     n = len(pairs)
     # Add pids keys to process mantaining the same order
-    processes = sorted(enumerate(pairs))  
-    print(processes)
+    # processes = sorted(enumerate(pairs))  
+    processes = sorted(enumerate(pairs), key=lambda x: x[1][0])  # Sort by arrival
+    # print(processes)
     
 
     # # Initialize arrays
@@ -152,6 +154,9 @@ def RR(pairs, quantum):
         current_process = queue[0]
         pid, (arrival, burst) = current_process
 
+        if arrival > current_time:
+            current_time = arrival
+
         if Tanswer[pid] == -1:
             Tanswer[pid] = current_time - arrival
             auxTanswer[pid] = Tanswer[pid]
@@ -167,13 +172,27 @@ def RR(pairs, quantum):
         
 
 
-        if burst <= quantum:
+        if (burst <= quantum) and (burst >= 0) :
             current_time += burst
-            queue.remove(current_process)
             # set return time IJ
-            Treturn[pid] = current_time - firstArrival[pid] 
+            # Treturn[pid] = (current_time) 
+            auxTreturn[pid] = current_time
+            Treturn[pid] = ( current_time - firstArrival[pid]) 
+
+            # if pid == n-1:
+            # print('tamo naeue', Treturn[pid], burst)  
+            #     Twait[pid] += current_time - auxTreturn[pid]
+            # Add all processes that have arrived by now to the queue
+            queue.remove(current_process)
+            arrived = [p for p in processes if p[1][0] <= current_time]
+            queue.extend(arrived)
+
+             # remove all arrived processes from the list of processes
+            for p in arrived:
+                processes.remove(p)
         else:
             current_time += quantum
+            auxTanswer[pid] = current_time
             # set return time
             auxTreturn[pid] = current_time
             queue.remove(current_process)
@@ -187,57 +206,53 @@ def RR(pairs, quantum):
             for p in arrived:
                 processes.remove(p)
         
-    
         
         # If queue is empty but there are still processes left
         if not queue and processes:
             queue.append(processes[0])
             current_time = processes[0][1][0]
-            print('notQueue')
+            # print('notQueue', Twait, n, pid)
             del processes[0]
-
-    print('Twait', Twait)
-    print('Tanswer', Tanswer)
-    print('Treturn', Treturn)
+        
+    # print('Tanswer', Tanswer)
+    # print('Twait', Twait)
+    # print('Treturn', Treturn)
         
     return Tanswer, Treturn, Twait
 
+# pairs = read_number_pairs('testes/teste1.txt')
+# pairs = read_number_pairs('testes/teste2.txt')
+# pairs = read_number_pairs('testes/teste3.txt')
+# pairs = read_number_pairs('testes/teste4.txt')
+# pairs = read_number_pairs('testes/teste5.txt')
+# pairs = read_number_pairs('testes/teste6.txt')
+# pairs = read_number_pairs('testes/teste7.txt')
+# pairs = read_number_pairs('testes/teste8.txt')
+pairs = read_number_pairs('testes/teste9.txt')
+# pairs = read_number_pairs('testes/teste10.txt')
 
 
-
-
-
-# Example usage
-# Example usage
-pairs = read_number_pairs('input.txt')
 # print(pairs)
 Tanswer, Treturn, Twait = fcfs(pairs)
 avgTanswer = average(Tanswer)
 avgTreturn = average(Treturn)
 avgTwait = average(Twait)
-print("FCFS: ", "Treturn: ", avgTreturn, "Tanswer: ", avgTanswer, "Twait: ", avgTwait)
-
+print("FCFS: ", avgTreturn, avgTanswer, avgTwait)
+# print("FCFS: ", "Treturn: ", avgTreturn, "Tanswer: ", avgTanswer, "Twait: ", avgTwait)
 
 Tanswer, Treturn, Twait = sjf(pairs)
 avgTanswer = average(Tanswer)
 avgTreturn = average(Treturn)
 avgTwait = average(Twait)
-print("SJF: ", "Treturn: ", avgTreturn, "Tanswer: ", avgTanswer, "Twait: ", avgTwait)
-
+print("SJF: ", avgTreturn, avgTanswer, avgTwait)
+# print("SJF: ", "Treturn: ", avgTreturn, "Tanswer: ", avgTanswer, "Twait: ", avgTwait)
 
 Tanswer, Treturn, Twait = RR(pairs, 2)
 avgTanswer = average(Tanswer)
 avgTreturn = average(Treturn)
 avgTwait = average(Twait)
-print("RR: ", "Treturn: ", avgTreturn, "Tanswer: ", avgTanswer, "Twait: ", avgTwait)
-
-# print("Tanswer:", Tanswer)
-# print("Treturn:", Treturn)
-# print("Twait:", Twait)
-# print("AVGTreturn:", average(Treturn))
-# print("AVGTanswer:", average(Tanswer))
-# print("AVGTwait:", average(Twait))
-
+print("RR: ", avgTreturn, avgTanswer, avgTwait)
+# print("RR: ", "Treturn: ", avgTreturn, "Tanswer: ", avgTanswer, "Twait: ", avgTwait)
     
 
 
