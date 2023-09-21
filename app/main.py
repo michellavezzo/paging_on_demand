@@ -26,17 +26,14 @@ def read_number_pairs(filename):
     return number_pairs
 
 # Calculate average value from an array 
-
 def average(array):
-    #limit to 1 decimal place
-    # return sum(array)/len(array)
     return round(sum(array)/len(array), 1)
 
 def fcfs(pairs):
     n = len(pairs)
     # print(pairs)
     # sort by arrival time
-    processes = sorted(enumerate(pairs), key=lambda x: x[1][0])  # Sort by arrival
+    processes = sorted(enumerate(pairs), key=lambda x: x[1][0])
     # print(processes)
     Tanswer = [-1] * n
     Treturn = [-1] * n
@@ -60,23 +57,11 @@ def fcfs(pairs):
     return Tanswer, Treturn, Twait
 
 
-# sjf algorithim without preemp, returning all answer, return ans wait time, return ans turn around time
 # small job first
-
-# 1 - sort by arrival time
-# 2 - sort by burst time
-# 3 - add to queue
-# 4 - pop from queue
-# 5 - add to answer
-# 6 - add to return
-# 7 - add to wait
-# 8 - repeat 4-7 until queue is empty
-# 9 - add all arrived processes to queue
-# 10 - repeat 4-9 until all processes are done
 def sjf(pairs):
     n = len(pairs)
     # Add keys (pids) to the processes and sort by arrival time then burst time
-    processes = sorted(enumerate(pairs), key=lambda x: (x[1][0], x[1][1]))  # Sort by arrival, then by burst
+    processes = sorted(enumerate(pairs), key=lambda x: (x[1][0], x[1][1])) 
 
     # Initialize arrays
     Tanswer = [-1] * n
@@ -90,7 +75,6 @@ def sjf(pairs):
 
     #start queue with first process
     queue = [processes[0]]
-
     del processes[0]
 
     while queue:
@@ -101,6 +85,9 @@ def sjf(pairs):
         queue.remove(current_process)
         pid, (arrival, burst) = current_process
         # print(queue)
+
+        if arrival > current_time:
+            current_time = arrival
 
         # Record times
         Tanswer[pid] = current_time - arrival
@@ -128,12 +115,10 @@ def sjf(pairs):
 
 def RR(pairs, quantum):
     n = len(pairs)
-    # Add pids keys to process mantaining the same order
     # processes = sorted(enumerate(pairs))  
     processes = sorted(enumerate(pairs), key=lambda x: x[1][0])  # Sort by arrival
     # print(processes)
     
-
     # # Initialize arrays
     Tanswer = [-1] * n
     Treturn = [-1] * n
@@ -174,14 +159,9 @@ def RR(pairs, quantum):
 
         if (burst <= quantum) and (burst >= 0) :
             current_time += burst
-            # set return time IJ
-            # Treturn[pid] = (current_time) 
             auxTreturn[pid] = current_time
             Treturn[pid] = ( current_time - firstArrival[pid]) 
 
-            # if pid == n-1:
-            # print('tamo naeue', Treturn[pid], burst)  
-            #     Twait[pid] += current_time - auxTreturn[pid]
             # Add all processes that have arrived by now to the queue
             queue.remove(current_process)
             arrived = [p for p in processes if p[1][0] <= current_time]
@@ -220,6 +200,7 @@ def RR(pairs, quantum):
         
     return Tanswer, Treturn, Twait
 
+pairs = read_number_pairs('input.txt')
 # pairs = read_number_pairs('testes/teste1.txt')
 # pairs = read_number_pairs('testes/teste2.txt')
 # pairs = read_number_pairs('testes/teste3.txt')
@@ -228,7 +209,7 @@ def RR(pairs, quantum):
 # pairs = read_number_pairs('testes/teste6.txt')
 # pairs = read_number_pairs('testes/teste7.txt')
 # pairs = read_number_pairs('testes/teste8.txt')
-pairs = read_number_pairs('testes/teste9.txt')
+# pairs = read_number_pairs('testes/teste9.txt')
 # pairs = read_number_pairs('testes/teste10.txt')
 
 

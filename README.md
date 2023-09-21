@@ -6,3 +6,5 @@
 Website used to debug scheduling algorithms.
 
 - <https://boonsuen.com/process-scheduling-solver>
+
+- <https://sig-arq.ufpb.br/arquivos/202307214870ed563516073e9dc5e5ea1/Trabalho01.pdf>
