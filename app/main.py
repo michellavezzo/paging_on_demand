@@ -139,6 +139,7 @@ def RR(pairs, quantum):
     auxTwait = [-1] * n
     auxTanswer = [-1] * n
     auxTreturn = [-1] * n
+    firstArrival = [-1] * n
 
     # Initially, only the process with the earliest arrival time can be considered
     current_time = processes[0][1][0]
@@ -153,20 +154,27 @@ def RR(pairs, quantum):
 
         if Tanswer[pid] == -1:
             Tanswer[pid] = current_time - arrival
-            print('Tanswer[pid]', Tanswer[pid])
+            auxTanswer[pid] = Tanswer[pid]
+            firstArrival[pid] = arrival
+            # print('Tanswer[pid]', Tanswer[pid])
+
+        if Twait[pid] == -1:
+            Twait[pid] = Tanswer[pid]
+            auxTreturn[pid] = current_time
+        else:
+            Twait[pid] += current_time - auxTreturn[pid]
+            # print('Twait[pid]', pid, Twait[pid])
         
+
+
         if burst <= quantum:
             current_time += burst
             queue.remove(current_process)
             # set return time IJ
-            Treturn[pid] = Tanswer[pid] 
-
-            # set wait time
-            Twait[pid] = Twait[pid] + burst
+            Treturn[pid] = current_time - firstArrival[pid] 
         else:
             current_time += quantum
             # set return time
-            Twait[pid] = Twait[pid] + auxTanswer[pid] - auxTwait[pid]
             auxTreturn[pid] = current_time
             queue.remove(current_process)
 
@@ -178,21 +186,7 @@ def RR(pairs, quantum):
             # remove all arrived processes from the list of processes
             for p in arrived:
                 processes.remove(p)
-        # set wait time
-
-
-
-        # if Twait[pid] == -1:
-        #     Twait[pid] = Tanswer[pid]
-
-        # auxTanswer[pid] = current_time - arrival
-
-        # if auxTwait[pid] == -1:
-        #     auxTwait[pid] = auxTanswer[pid]
-
         
-        # Record times
-
     
         
         # If queue is empty but there are still processes left
@@ -201,6 +195,10 @@ def RR(pairs, quantum):
             current_time = processes[0][1][0]
             print('notQueue')
             del processes[0]
+
+    print('Twait', Twait)
+    print('Tanswer', Tanswer)
+    print('Treturn', Treturn)
         
     return Tanswer, Treturn, Twait
 
