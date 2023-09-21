@@ -16,3 +16,5 @@ Website used to debug scheduling algorithms.
 ```bash
 python3 app/main.py
 ```
+
+- Repository: < <https://github.com/michellavezzo/scheduling-algorithms> >
