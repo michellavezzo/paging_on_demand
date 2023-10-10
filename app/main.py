@@ -55,15 +55,16 @@ def otm(frameSize, list):
     for i in range(len(list)):
         # Removing atual list element index from auxList
         auxList[list[i]].pop(0)
-        #if list not filled, fill it. 
-        #else find the number that has the largest index in the list to change it.
-        if len(frame) < frameSize:
-            if list[i] not in frame:
-                frame.append(list[i])
-                pageFault += 1
-        else:
-            if list[i] not in frame:
-                # find the number that has the largest index in the list
+        #if the list is not in the frame, add it to the frame
+        if list[i] not in frame:
+            #if list not filled, fill it. 
+            #else find the number that has the largest index in the list to change it.
+            if len(frame) < frameSize:
+                    frame.append(list[i])
+                    pageFault += 1
+            else:
+                # if list[i] not in frame:
+                    # find the number that has the largest index in the list
                 farestFrameKey = -1
                 for j in range(len(frame)):
                     if auxList[frame[j]]:
@@ -75,12 +76,43 @@ def otm(frameSize, list):
                         break
                 frame[farestFrameKey] = list[i]
                 pageFault += 1
-        
+            
             
     print('pgFault: ', pageFault)
     return pageFault
 
+#LRU Least Recently Used 
 
+# def LRU (frameSize, list):
+#     pageFault = 0
+#     frame = []
+#     auxList = {}
+
+#     #Guard clause to return the number of page faults if the frame size is greater than the list size
+#     if frameSize >= len(list):
+#         return len(list)
+    
+#     # auxlist is an object. 
+#     # the keys are the numbers in the list and the values are all index of the number in the list
+#     for i in range(len(list)):
+#         if list[i] not in auxList:
+#             auxList[list[i]] = [i]
+#         else:
+#             auxList[list[i]].append(i)
+#     print(auxList)
+
+#     for i in range(len(list)):
+#         if len(frame) < frameSize:
+#             if list[i] not in frame:
+#                 frame.append(list[i])
+#                 pageFault += 1
+#         else:
+#             if list[i] not in frame:
+
+        
+            
+    print('pgFault: ', pageFault)
+    return pageFault
 
    
     
