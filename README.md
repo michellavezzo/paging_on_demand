@@ -1,7 +1,10 @@
 # paging_on_demand algorithms
 
-Website used to debug scheduling algorithms.
-
+### Project for O.S. discipline
+#### Fifo (First In First Out)
+#### OTM (Otimum algorithm, used for reference)
+#### LRU (Least Recently Used)
+ 
 ![Alt text](image-2.png)
 ![Alt text](image-3.png)
 ![Alt text](image-4.png)
